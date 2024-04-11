@@ -9,7 +9,7 @@ export const GET = async (req) => {
     skip: POST_PER_PAGE * (page - 1),
   };
   try {
-    const { count, posts } = await prisma.$transaction([
+    const [count, posts] = await prisma.$transaction([
       prisma.post.findMany(query),
       prisma.post.count(),
     ]);
