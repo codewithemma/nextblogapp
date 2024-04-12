@@ -14,7 +14,12 @@ const Card = ({ key, item }) => {
         </div>
         <Link href={`/posts/`}>
           <h1>{item.title}</h1>
-          <p>{item.desc}</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Consectetur ipsa perspiciatis deserunt odio porro quidem vitae dicta
+            repellendus, a repellat impedit necessitatibus ea! Maxime officiis
+            sunt id ullam quo eum?
+          </p>
         </Link>
         <div className={styles.desc} />
         <Link href={`/`} className={styles.link}>

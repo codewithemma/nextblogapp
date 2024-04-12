@@ -13,13 +13,11 @@ export const GET = async (req) => {
       prisma.post.findMany(query),
       prisma.post.count(),
     ]);
-    return new NextResponse(
-      JSON.stringify({ posts, count }, { status: "200" })
-    );
+    return new NextResponse(JSON.stringify({ posts, count }, { status: 200 }));
   } catch (error) {
     console.log(error);
     return new NextResponse(
-      JSON.stringify({ message: "Something went wrong!" }, { status: "500" })
+      JSON.stringify({ message: "Something went wrong!" }, { status: 500 })
     );
   }
 };
