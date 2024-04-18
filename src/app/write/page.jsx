@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import styles from "./WritePage.module.css";
 import Image from "next/image";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,7 +12,8 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "@/utils/firebase";
-const storage = getStorage(app);
+import dynamic from "next/dynamic";
+import ReactQuill from "react-quill";
 const WritePage = () => {
   const router = useRouter();
   const [file, setFile] = useState(null);
@@ -21,6 +21,8 @@ const WritePage = () => {
   const [media, setMedia] = useState("");
   const [title, setTitle] = useState("");
   const [value, setValue] = useState(false);
+  const [catSlug, setCatSlug] = useState("");
+
   useEffect(() => {
     const storage = getStorage(app);
     const upload = () => {
@@ -79,12 +81,15 @@ const WritePage = () => {
         desc: value,
         img: media,
         slug: slugify(title),
-        catSlug: "travel",
+        catSlug: catSlug || "style",
       }),
     });
-    console.log(res);
-  };
 
+    if (res.status === 200) {
+      const data = await res.json();
+      router.push(`/posts/${data.slug}`);
+    }
+  };
   return (
     <div className={styles.container}>
       <input
@@ -93,6 +98,17 @@ const WritePage = () => {
         className={styles.input}
         onChange={(event) => setTitle(event.target.value)}
       />
+      <select
+        className={styles.select}
+        onChange={(e) => setCatSlug(e.target.value)}
+      >
+        <option value="style">style</option>
+        <option value="fashion">fashion</option>
+        <option value="food">food</option>
+        <option value="culture">culture</option>
+        <option value="travel">travel</option>
+        <option value="coding">coding</option>
+      </select>
       <div className={styles.editor}>
         <button className={styles.button} onClick={() => setOpen(!open)}>
           <Image src="/plus.png" alt="" width={16} height={16} />
