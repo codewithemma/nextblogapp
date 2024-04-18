@@ -22,10 +22,13 @@ const WritePage = () => {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState(false);
   useEffect(() => {
+    const storage = getStorage(app);
     const upload = () => {
-      const name = new Date().getTime + file.name;
+      const name = new Date().getTime() + file.name;
       const storageRef = ref(storage, name);
-      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -41,25 +44,16 @@ const WritePage = () => {
               break;
           }
         },
-        (error) => {
-          switch (error.code) {
-            case "storage/unauthorized":
-              break;
-            case "storage/canceled":
-              break;
-            case "storage/unknown":
-              break;
-          }
-        },
+        (error) => {},
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
             setMedia(downloadURL);
           });
         }
       );
     };
-    file && upload;
+
+    file && upload();
   }, [file]);
 
   const { status } = useSession();
@@ -85,6 +79,7 @@ const WritePage = () => {
         desc: value,
         img: media,
         slug: slugify(title),
+        catSlug: "travel",
       }),
     });
     console.log(res);
