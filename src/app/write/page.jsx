@@ -24,6 +24,10 @@ const WritePage = () => {
   const [catSlug, setCatSlug] = useState("");
 
   useEffect(() => {
+    const ClientComponent = dynamic(
+      () => import("../components/ClientComponent"),
+      { ssr: false }
+    );
     const storage = getStorage(app);
     const upload = () => {
       const name = new Date().getTime() + file.name;
@@ -147,6 +151,7 @@ const WritePage = () => {
       <button className={styles.publish} onClick={handleSubmit}>
         Publish
       </button>
+      <ClientComponent />
     </div>
   );
 };
