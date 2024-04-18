@@ -13,9 +13,11 @@ import {
 } from "firebase/storage";
 import { app } from "@/utils/firebase";
 import dynamic from "next/dynamic";
-import ReactQuill from "react-quill";
 const WritePage = () => {
   const router = useRouter();
+  const ReactQuill = dynamic(() => import("react-quill"), {
+    ssr: false,
+  });
   const [file, setFile] = useState(null);
   const [open, setOpen] = useState(false);
   const [media, setMedia] = useState("");
@@ -24,10 +26,6 @@ const WritePage = () => {
   const [catSlug, setCatSlug] = useState("");
 
   useEffect(() => {
-    const ClientComponent = dynamic(
-      () => import("../components/ClientComponent"),
-      { ssr: false }
-    );
     const storage = getStorage(app);
     const upload = () => {
       const name = new Date().getTime() + file.name;
@@ -151,7 +149,6 @@ const WritePage = () => {
       <button className={styles.publish} onClick={handleSubmit}>
         Publish
       </button>
-      <ClientComponent />
     </div>
   );
 };
