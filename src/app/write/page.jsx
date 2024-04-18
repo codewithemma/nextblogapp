@@ -69,7 +69,26 @@ const WritePage = () => {
   if (status === "unauthenticated") {
     return router.push("/login");
   }
-  const handleSubmit = () => {};
+  const slugify = (str) =>
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const handleSubmit = async () => {
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        desc: value,
+        img: media,
+        slug: slugify(title),
+      }),
+    });
+    console.log(res);
+  };
 
   return (
     <div className={styles.container}>
