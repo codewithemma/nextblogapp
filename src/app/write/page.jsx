@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "./WritePage.module.css";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import "react-quill/dist/quill.bubble.css";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,11 +13,11 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "@/utils/firebase";
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false,
+});
 const WritePage = () => {
   const router = useRouter();
-  const ReactQuill = dynamic(() => import("react-quill"), {
-    ssr: false,
-  });
   const [file, setFile] = useState(null);
   const [open, setOpen] = useState(false);
   const [media, setMedia] = useState("");
